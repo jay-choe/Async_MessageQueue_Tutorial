@@ -1,6 +1,5 @@
 package async.example.service;
 
-import async.example.domain.AsyncRequest;
 import async.example.domain.OrderRequestDto;
 import async.example.domain.PayRequestDto;
 import async.example.domain.entity.OrderLog;
@@ -40,7 +39,7 @@ public class OrderService {
 
         OrderLog orderLog = checkStockAndCreateOrder(product, requestStock, OrderStatus.WAITING_FOR_PAYMENT);
 
-        Long totalPrice = product.getPrice() * orderRequestDto.getStock();
+        Long totalPrice = product.getPrice() * requestStock;
         ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
         log.info("==========결제 요청 =============");
         log.info("결제 요청 결과: {}", response.getBody());
@@ -63,7 +62,7 @@ public class OrderService {
         OrderLog orderLog = checkStockAndCreateOrder(product, requestStock, OrderStatus.WAITING_FOR_PAYMENT);
 
         // 결제 성공시까지 계속 try
-        Long totalPrice = product.getPrice() * orderRequestDto.getStock();
+        Long totalPrice = product.getPrice() * requestStock;
         ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
         while (response.getBody().equals("실패")) {
             response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
@@ -79,7 +78,7 @@ public class OrderService {
 
         OrderLog orderLog = checkStockAndCreateOrder(product, requestStock, OrderStatus.ASYNC_ORDER_REQUEST_COMPLETE);
 
-        Long totalPrice = product.getPrice() * orderRequestDto.getStock();
+        Long totalPrice = product.getPrice() * requestStock;
         PayRequestDto asyncRequest = new PayRequestDto(orderLog.getId(), totalPrice);
         restTemplate.postForEntity(paymentUrl + "/async", asyncRequest, String.class);
         log.info("결제 요청 완료");
