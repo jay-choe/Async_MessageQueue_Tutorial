@@ -7,7 +7,7 @@ spring:
     show-sql: true
     defer-datasource-initialization: true
   datasource:
-    url: jdbc:mysql://localhost:3306/async?useSSL=false&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:21746/async?useSSL=false&useUnicode=true&characterEncoding=utf8
     username: root
     password: 1234
   sql:

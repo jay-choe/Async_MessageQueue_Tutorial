@@ -9,14 +9,10 @@ k
 ;payment/src/main/java/async/example/PaymentApplication.java,b/8/b84615ae061125ebf6936e8b01f4be27b3f163ce
 D
 payment/build.gradle,9/7/972844c796e2509c5fe3d3c3f622026c146db6ac
-B
-order/build.gradle,a/e/aeac4a66d347b9d9ebd7ccb20b0e0b04264f7117
 ?
 settings.gradle,0/5/05efc8b1657769a27696d478ded1e95f38737233
 D
 message/build.gradle,9/8/98590722083e1d9f643ebcd740f7207c2ff50e1d
-<
-build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
 q
 Aorder/src/main/java/async/example/publish/binder/OrderBinder.java,a/4/a4476f9d7e8a564a481f8b3e4d18b85e3d17b6ac
 t
@@ -31,8 +27,6 @@ w
 Gpayment/src/main/java/async/example/publish/binder/PayResultBinder.java,2/7/27b0a26340c7139738a3990f6ec5098af60f2c5a
 r
 Bpayment/src/main/java/async/example/listen/DeadLetterListener.java,3/3/33b494d068f1c5714a765118af48e68442d7b8de
-u
-Epayment/src/main/java/async/example/controller/PaymentController.java,e/5/e59404e03ce26b00074c9999da23b9166c0b9520
 _
 /message/src/main/java/message/OrderMessage.java,0/c/0c502a102eade75cc9a65394c86029f4b26a7e1f
 _

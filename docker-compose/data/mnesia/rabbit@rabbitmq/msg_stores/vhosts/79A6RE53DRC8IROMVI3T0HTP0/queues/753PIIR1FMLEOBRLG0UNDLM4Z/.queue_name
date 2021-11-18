@@ -1,0 +1,2 @@
+VHOST: test-virtual-host
+QUEUE: payrequest.test-queue

@@ -1,6 +1,5 @@
 package async.example.controller;
 
-import async.example.domain.AsyncRequest;
 import async.example.service.PayService;
 import lombok.RequiredArgsConstructor;
 import message.PayRequest;
