@@ -19,8 +19,12 @@ import org.springframework.web.client.RestTemplate;
 public class OrderService {
     RestTemplate restTemplate = new RestTemplate();
     private static final String paymentUrl = "http://localhost:20002/payment";
+    private static final int SYNC = 0;
+    private static final int ASYNC = 1;
+
     private final OrderLogRepository orderLogRepository;
     private final ProductRepository productRepository;
+
 
     public OrderService(
         OrderLogRepository orderLogRepository,
@@ -42,10 +46,7 @@ public class OrderService {
         log.info("결제 요청 결과: {}", response.getBody());
         if (response.getBody().equals("성공")) {
             log.info("결제에 성공했습니다.");
-            product.updateStock(orderRequestDto.getStock());
-            productRepository.save(product);
-            orderLog.setStatus(OrderStatus.COMPLETE);
-            orderLogRepository.save(orderLog);
+            saveSuccessOrder(product, requestStock, orderLog, SYNC);
             return true;
         } else {
             log.info("결제에 실패했습니다.");
@@ -69,10 +70,7 @@ public class OrderService {
             log.info(response.getBody());
         }
         log.info("결제 성공");
-        product.updateStock(orderRequestDto.getStock());
-        productRepository.save(product);
-        orderLog.setStatus(OrderStatus.COMPLETE);
-        orderLogRepository.save(orderLog);
+        saveSuccessOrder(product, requestStock, orderLog, SYNC);
     }
 
     public void orderAsync(OrderRequestDto orderRequestDto) {
@@ -80,7 +78,7 @@ public class OrderService {
         int requestStock = orderRequestDto.getStock();
 
         OrderLog orderLog = checkStockAndCreateOrder(product, requestStock, OrderStatus.ASYNC_ORDER_REQUEST_COMPLETE);
-        
+
         Long totalPrice = product.getPrice() * orderRequestDto.getStock();
         PayRequestDto asyncRequest = new PayRequestDto(orderLog.getId(), totalPrice);
         restTemplate.postForEntity(paymentUrl + "/async", asyncRequest, String.class);
@@ -96,10 +94,7 @@ public class OrderService {
             .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));
         log.info("재고 차감 중");
         log.info("========================");
-        orderLog.setStatus(OrderStatus.COMPLETE);
-        product.updateStock(orderLog.getOrderStock());
-        productRepository.save(product);
-        orderLogRepository.save(orderLog);
+        saveSuccessOrder(product, orderLog.getOrderStock(), orderLog, ASYNC);
         log.info("주문 상태 변경 및 재고 차감 완료");
     }
 
@@ -118,6 +113,19 @@ public class OrderService {
         log.info("============주문 내역 생성==========");
         OrderLog orderLog = OrderLog.create(product, requestStock, status);
         return orderLogRepository.save(orderLog);
+    }
+
+
+    @Transactional
+    void saveSuccessOrder(Product product, int requestStock, OrderLog orderLog, int syncType) {
+        if (syncType == SYNC) {
+            product.updateStock(requestStock);
+        } else {
+            product.updateStock(orderLog.getOrderStock());
+        }
+        productRepository.save(product);
+        orderLog.setStatus(OrderStatus.COMPLETE);
+        orderLogRepository.save(orderLog);
     }
 
 }
