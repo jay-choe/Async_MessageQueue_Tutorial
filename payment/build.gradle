@@ -29,6 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.core:jackson-core'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    implementation project(':message')
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-rabbit', version: '3.0.7.RELEASE'
+
 }

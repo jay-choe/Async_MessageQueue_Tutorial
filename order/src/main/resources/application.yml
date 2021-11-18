@@ -13,3 +13,5 @@ spring:
   sql:
     init:
       mode: always
+  profiles:
+    active: stream-rabbitmq

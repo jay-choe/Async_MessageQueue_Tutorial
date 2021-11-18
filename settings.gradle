@@ -1,3 +1,5 @@
 rootProject.name = 'async'
 include 'payment'
 include 'order'
+include 'message'
+

@@ -9,6 +9,7 @@
         </processorPath>
         <module name="async.order.main" />
         <module name="async.payment.main" />
+        <module name="async.message.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11" />

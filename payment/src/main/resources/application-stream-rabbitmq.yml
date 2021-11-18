@@ -1,0 +1,26 @@
+spring:
+  rabbitmq:
+    addresses: localhost:5672
+    username: root
+    password: 1234
+    virtual-host: test-virtual-host
+  cloud:
+    stream:
+      default:
+        contentType: application/json
+      bindings:
+        subscribeChannel:
+          binder: rabbit
+          destination: payrequest
+          producer:
+            required-groups: test-queue
+        resultCheannel:
+          binder: rabbit
+          destination: resultChannel
+          producer:
+            required-groups: test-queue
+        deadLetterChannel:
+          binder: rabbit
+          destination: dead-letter-queue
+          producer:
+            required-groups: test-queue

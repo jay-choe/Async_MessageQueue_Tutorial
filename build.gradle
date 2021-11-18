@@ -24,7 +24,8 @@ subprojects {
 
     dependencies {
         compileOnly('org.springframework.boot:spring-boot-starter-web')
-        compileOnly('org.projectlombok:lombok')
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
         testCompileOnly group: 'junit', name: 'junit'
         testCompileOnly('org.springframework.boot:spring-boot-starter-test')
         runtimeOnly('mysql:mysql-connector-java')

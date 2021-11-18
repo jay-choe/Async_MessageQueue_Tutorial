@@ -19,14 +19,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly(project(':payment'))
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.core:jackson-core'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    implementation project(':message')
+    // rabbit
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-rabbit', version: '3.0.7.RELEASE'
+
 }
 
 test {
