@@ -111,7 +111,6 @@ public class OrderService {
             .build();
         orderLogRepository.save(orderLog);
         log.info("==========주문 내역 생성=============");
-        // 결제 성공시까지 계속 try
         Long totalPrice = product.getPrice() * orderRequestDto.getStock();
         PayRequestDto asyncRequest = new PayRequestDto(orderLog.getId(), totalPrice);
         restTemplate.postForEntity(paymentUrl + "/async", asyncRequest, String.class);
