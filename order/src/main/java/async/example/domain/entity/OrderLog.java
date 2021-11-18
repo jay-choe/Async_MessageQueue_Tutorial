@@ -36,4 +36,13 @@ public class OrderLog {
         this.status = status;
     }
 
+    public static OrderLog create(Product product, int stock, OrderStatus status) {
+        return OrderLog.builder()
+                .productId(product.getId())
+                .productName(product.getName())
+                .productPrice(product.getPrice())
+                .orderStock(stock)
+                .status(status)
+                .build();
+    }
 }

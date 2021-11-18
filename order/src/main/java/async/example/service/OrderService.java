@@ -37,13 +37,8 @@ public class OrderService {
         stockCheck(product.getStock(), orderRequestDto.getStock());
 
         log.info("============주문 생성중==========");
-        OrderLog orderLog = OrderLog.builder()
-            .productId(product.getId())
-            .productName(product.getName())
-            .productPrice(product.getPrice())
-            .orderStock(orderRequestDto.getStock())
-            .status(OrderStatus.WAITING_FOR_PAYMENT)
-            .build();
+        OrderLog orderLog = OrderLog.create(product, orderRequestDto.getStock(), OrderStatus.WAITING_FOR_PAYMENT);
+
         orderLogRepository.save(orderLog);
         log.info("==========주문 내역 생성=============");
         Long totalPrice = product.getPrice() * orderRequestDto.getStock();
@@ -72,13 +67,8 @@ public class OrderService {
         stockCheck(product.getStock(), orderRequestDto.getStock());
 
         log.info("주문 생성중");
-        OrderLog orderLog = OrderLog.builder()
-            .productId(product.getId())
-            .productName(product.getName())
-            .productPrice(product.getPrice())
-            .orderStock(orderRequestDto.getStock())
-            .status(OrderStatus.WAITING_FOR_PAYMENT)
-            .build();
+        OrderLog orderLog = OrderLog.create(product, orderRequestDto.getStock(), OrderStatus.WAITING_FOR_PAYMENT);
+
         orderLogRepository.save(orderLog);
         log.info("==========주문 내역 생성=============");
         // 결제 성공시까지 계속 try
@@ -102,13 +92,8 @@ public class OrderService {
         stockCheck(product.getStock(), orderRequestDto.getStock());
 
         log.info("주문 생성중");
-        OrderLog orderLog = OrderLog.builder()
-            .productId(product.getId())
-            .productName(product.getName())
-            .productPrice(product.getPrice())
-            .orderStock(orderRequestDto.getStock())
-            .status(OrderStatus.ASYNC_ORDER_REQUEST_COMPLETE)
-            .build();
+        OrderLog orderLog = OrderLog.create(product, orderRequestDto.getStock(), OrderStatus.ASYNC_ORDER_REQUEST_COMPLETE);
+
         orderLogRepository.save(orderLog);
         log.info("==========주문 내역 생성=============");
         Long totalPrice = product.getPrice() * orderRequestDto.getStock();
