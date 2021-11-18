@@ -1,0 +1,36 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.6'
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+
+    group 'org.example'
+    sourceCompatibility = JavaVersion.VERSION_11
+
+    dependencies {
+        compileOnly('org.springframework.boot:spring-boot-starter-web')
+        compileOnly('org.projectlombok:lombok')
+        testCompileOnly group: 'junit', name: 'junit'
+        testCompileOnly('org.springframework.boot:spring-boot-starter-test')
+        runtimeOnly('mysql:mysql-connector-java')
+    }
+
+    clean {
+        delete 'out'
+    }
+}
