@@ -119,7 +119,7 @@ public class OrderService {
 
     // 비동기 요청 완료 후 해당 클라이언트가 보내는 결과를 받는 메서드 입니다.
     public void orderAsyncResult(Integer orderId) {
-        OrderLog orderLog = orderLogRepository.findByProductId(orderId)
+        OrderLog orderLog = orderLogRepository.findById(orderId)
             .orElseThrow(() -> new RuntimeException("존재하지 않는 주문내역입니다."));
         log.info("주문 요청 처리 완료");
         Product product = productRepository.findById(orderLog.getProductId())
