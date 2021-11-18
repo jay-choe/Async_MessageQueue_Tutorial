@@ -43,9 +43,9 @@ public class PayService {
         while (true) {
             boolean result = pay(req.getTotalPrice());
             if (result == Boolean.TRUE) {
-                log.info("결제 성공- 상품 아이디: {}", req.getProductId());
+                log.info("결제 성공- 주문 아이디: {}", req.getOrderId());
                 log.info("결제 성공 정보를 주문서비스에 알립니다.");
-                restTemplate.postForEntity(RESULT_SEND_URL, req.getProductId(), String.class);
+                restTemplate.postForEntity(RESULT_SEND_URL, req.getOrderId(), String.class);
                 return ;
             }
         }

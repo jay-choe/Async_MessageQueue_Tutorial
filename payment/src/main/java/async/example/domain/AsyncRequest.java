@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AsyncRequest {
-    private Integer productId;
+    private Integer orderId;
     private Long totalPrice;
 }
