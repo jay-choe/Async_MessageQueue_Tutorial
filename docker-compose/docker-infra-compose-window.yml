@@ -46,12 +46,12 @@ services:
     command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: test1234
-      MYSQL_DATABASE: commerce_platform
-      MYSQL_USER: test_lecture
-      MYSQL_PASSWORD: test1234
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: async
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
     ports:
-      - "3306:3306"
+      - "21746:3306"
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
@@ -62,5 +62,5 @@ services:
       - "8080:15672"
       - "5672:5672"
     environment:
-      - RABBITMQ_DEFAULT_USER=test_lecture
-      - RABBITMQ_DEFAULT_PASS=test1234
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=1234
