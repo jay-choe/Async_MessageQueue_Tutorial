@@ -152,7 +152,7 @@ public class OrderService {
         OrderMessage orderMessage = OrderMessage.builder()
             .logId(orderLog.getId())
             .productId(product.getId())
-            .stock(product.getStock())
+            .stock(orderRequest.getStock())
             .totalPrice(totalPrice)
             .build();
 
@@ -168,13 +168,13 @@ public class OrderService {
         orderLogRepository.save(orderLog);
     }
 
+    @Transactional
     public void handlePaymentResult(OrderMessage message) {
         OrderLog orderLog = orderLogRepository.findById(message.getLogId()).orElseThrow(() -> new RuntimeException("주문내역이 존재하지 않습니다."));
         orderLog.setStatus(OrderStatus.COMPLETE);
         Product product = productRepository.findById(message.getProductId())
             .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));
         product.updateStock(message.getStock());
-        productRepository.save(product);
         log.info("======================");
         log.info("주문 결과 처리 완료");
     }
