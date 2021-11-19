@@ -1,8 +1,10 @@
 package async.example.service;
 
-import async.example.domain.AsyncRequest;
 import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
+import message.OrderMessage;
+import message.OrderRequest;
+import message.PayRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,13 +41,24 @@ public class PayService {
     }
 
     // 결제 성공 할 때까지 반복하는 함수 -> 성공시 주문 서비스에 알림
-    public void payTryToSucceed(AsyncRequest req) {
+    public void payTryToSucceed(PayRequest req) {
         while (true) {
             boolean result = pay(req.getTotalPrice());
             if (result == Boolean.TRUE) {
                 log.info("결제 성공- 주문 아이디: {}", req.getOrderId());
                 log.info("결제 성공 정보를 주문서비스에 알립니다.");
                 restTemplate.postForEntity(RESULT_SEND_URL, req.getOrderId(), String.class);
+                return ;
+            }
+        }
+    }
+
+    // Dead Queue에 있는 결제 요청 내역을 성공할 때까지 시도하는 함수 입니다.
+    public void payToSucceedInDeadLetterQueue(OrderMessage orderMessage) {
+        while (true) {
+            boolean result = pay(orderMessage.getTotalPrice());
+            if (result == Boolean.TRUE) {
+                log.info("결제 성공- 주문 아이디: {}", orderMessage.getLogId());
                 return ;
             }
         }

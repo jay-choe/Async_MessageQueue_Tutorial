@@ -1,8 +1,8 @@
 package async.example.controller;
 
-import async.example.domain.AsyncRequest;
 import async.example.service.PayService;
 import lombok.RequiredArgsConstructor;
+import message.PayRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,8 +31,8 @@ public class PaymentController {
     }
 
     @PostMapping("/async")
-    public ResponseEntity payAsync(@RequestBody final AsyncRequest asyncRequest) {
-        new Thread(() -> payService.payTryToSucceed(asyncRequest)).start();
+    public ResponseEntity payAsync(@RequestBody final PayRequest payRequest) {
+        new Thread(() -> payService.payTryToSucceed(payRequest)).start();
         return new ResponseEntity("결제 요청 완료", HttpStatus.OK);
     }
 }
