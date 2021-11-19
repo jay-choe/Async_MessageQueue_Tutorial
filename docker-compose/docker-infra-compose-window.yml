@@ -1,0 +1,66 @@
+version: '3.7'
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: wurstmeister/zookeeper:3.4.6
+    volumes:
+      - "./zookeeper/data:/data"
+      - "./zookeeper/logs:/datalog"
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka:2.12-2.0.1
+    container_name: kafka
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "test-lecture-test-topic:1:1"   # Topic명:Partition개수:Replica개수
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+
+  # https://github.com/hleb-albau/kafka-manager-docker
+  kafka-manager:
+    image: hlebalbau/kafka-manager:2.0.0.2
+    container_name: kafka-manager
+    restart: on-failure
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+      ZK_HOSTS: zookeeper:2181
+      APPLICATION_SECRET: "random-secret"
+      KM_ARGS: -Djava.net.preferIPv4Stack=true
+    ports:
+      - "9000:9000"
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: test1234
+      MYSQL_DATABASE: commerce_platform
+      MYSQL_USER: test_lecture
+      MYSQL_PASSWORD: test1234
+    ports:
+      - "3306:3306"
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    volumes:
+      - "./data:/var/lib/rabbitmq"
+    ports:
+      - "8080:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=test_lecture
+      - RABBITMQ_DEFAULT_PASS=test1234
