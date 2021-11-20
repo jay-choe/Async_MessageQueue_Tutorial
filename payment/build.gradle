@@ -30,6 +30,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation project(':message')
+    //rabbit
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-rabbit', version: '3.0.7.RELEASE'
+    // kafka
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka', version: '3.0.7.RELEASE'
 
 }

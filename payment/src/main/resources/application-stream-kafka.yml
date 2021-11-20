@@ -1,0 +1,24 @@
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+  cloud:
+    stream:
+      default:
+        contentType: application/json
+      bindings:
+        subscribeChannel:
+          binder: kafka
+          destination: payrequest
+          producer:
+            required-groups: test-queue
+        resultCheannel:
+          binder: kafka
+          destination: resultChannel
+          producer:
+            required-groups: test-queue
+        deadLetterChannel:
+          binder: kafka
+          destination: dead-letter-queue
+          producer:
+            required-groups: test-queue
