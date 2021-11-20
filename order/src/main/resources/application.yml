@@ -3,15 +3,12 @@ server:
 spring:
   jpa:
     hibernate:
-      ddlAuto: create
+      ddlAuto: update
     show-sql: true
-    defer-datasource-initialization: true
   datasource:
-    url: jdbc:mysql://localhost:21746/async?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/async?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
     username: root
     password: 1234
-  sql:
-    init:
-      mode: always
+    initialization-mode: always
   profiles:
     active: stream-rabbitmq
