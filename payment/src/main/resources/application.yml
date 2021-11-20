@@ -3,3 +3,6 @@ server:
 spring:
   profiles:
     active: stream-rabbitmq
+  cloud:
+    stream:
+      default-binder: rabbit
