@@ -126,7 +126,6 @@ public class OrderService {
                 log.error("=================결제 성공===============");
                 orderAsyncResult(orderLog.getId());
             }
-
         }).start();
         log.info("결제 요청 완료");
     }

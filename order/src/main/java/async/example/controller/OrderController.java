@@ -39,13 +39,7 @@ public class OrderController {
     }
 
     @PostMapping("/async/mq")
-    public ResponseEntity<String> orderAsyncByMessageQueue(@RequestBody OrderRequest orderRequest) { // 비동기 요청 후 처리 결과를 받는 API 입니다.
-        orderService.orderAsyncMessaging(orderRequest);
-        return new ResponseEntity<>("주문 요청이 생성되었습니다.", HttpStatus.OK);
-    }
-
-    @PostMapping("/async/kafka")
-    public ResponseEntity<String> orderAsyncByKafka(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<String> orderAsyncByMessageQueue(@RequestBody OrderRequest orderRequest) { // 메세지 큐를 통한 비동기 요청입니다.
         orderService.orderAsyncMessaging(orderRequest);
         return new ResponseEntity<>("주문 요청이 생성되었습니다.", HttpStatus.OK);
     }
