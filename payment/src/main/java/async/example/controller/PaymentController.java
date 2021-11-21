@@ -29,10 +29,4 @@ public class PaymentController {
             return new ResponseEntity("성공", HttpStatus.OK);
         }
     }
-
-    @PostMapping("/async")
-    public ResponseEntity payAsync(@RequestBody final PayRequest payRequest) {
-        new Thread(() -> payService.payTryToSucceed(payRequest)).start();
-        return new ResponseEntity("결제 요청 완료", HttpStatus.OK);
-    }
 }

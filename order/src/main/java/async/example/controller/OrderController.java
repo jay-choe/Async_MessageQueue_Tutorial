@@ -38,12 +38,6 @@ public class OrderController {
         return new ResponseEntity<>("주문 요청이 생성되었습니다.", HttpStatus.OK);
     }
 
-    @PostMapping("/async/result/v1")
-    public ResponseEntity<String> orderAsyncResult(@RequestBody Integer prodId) { // 비동기 요청 후 처리 결과를 받는 API 입니다.
-        orderService.orderAsyncResult(prodId);
-        return new ResponseEntity<>("주문 요청이 생성되었습니다.", HttpStatus.OK);
-    }
-
     @PostMapping("/async/mq")
     public ResponseEntity<String> orderAsyncByMessageQueue(@RequestBody OrderRequest orderRequest) { // 비동기 요청 후 처리 결과를 받는 API 입니다.
         orderService.orderAsyncMessaging(orderRequest);

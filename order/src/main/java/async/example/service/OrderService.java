@@ -116,12 +116,22 @@ public class OrderService {
         orderLogRepository.save(orderLog);
         log.info("==========주문 내역 생성=============");
         Long totalPrice = product.getPrice() * orderRequest.getStock();
-        PayRequest asyncRequest = new PayRequest(orderLog.getId(), totalPrice);
-        restTemplate.postForEntity(paymentUrl + "/async", asyncRequest, String.class);
+        new Thread( () ->
+        {
+            ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
+            if (response.getBody().equals("실패")) {
+                log.error("=================결제 실패===============");
+                log.info("실패 내역- 요청ID: {}, 상품ID:{} , 금액: {}", orderLog.getId(), orderLog.getProductId(), totalPrice);
+            } else {
+                log.error("=================결제 성공===============");
+                orderAsyncResult(orderLog.getId());
+            }
+
+        }).start();
         log.info("결제 요청 완료");
     }
 
-    // 비동기 요청 완료 후 해당 클라이언트가 보내는 결과를 받는 메서드 입니다.
+    // 비동기 요청 완료 후
     public void orderAsyncResult(Integer orderId) {
         OrderLog orderLog = orderLogRepository.findById(orderId)
             .orElseThrow(() -> new RuntimeException("존재하지 않는 주문내역입니다."));
@@ -168,6 +178,7 @@ public class OrderService {
         orderLogRepository.save(orderLog);
     }
 
+    // 메세지 큐로 받은 결제의 결과를 처리하는 함수
     @Transactional
     public void handlePaymentResult(OrderMessage message) {
         OrderLog orderLog = orderLogRepository.findById(message.getLogId()).orElseThrow(() -> new RuntimeException("주문내역이 존재하지 않습니다."));

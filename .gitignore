@@ -57,8 +57,8 @@ out/
 # VS Code
 .vscode/
 
-docker-compose/data/
-docker-compose/zookeeper/
+docker-compose/data
+docker-compose/zookeeper
 
 # OSX
 .DS_Store
