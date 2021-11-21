@@ -12,15 +12,19 @@ spring:
         subscribeChannel:
           binder: rabbit
           destination: payrequest
+          group: pay
+          queueNameGroupOnly: true
           producer:
-            required-groups: test-queue
+            required-groups: pay
         resultCheannel:
           binder: rabbit
           destination: resultChannel
-          producer:
-            required-groups: test-queue
+          group: result
+          queueNameGroupOnly: true
         deadLetterChannel:
           binder: rabbit
           destination: dead-letter-queue
+          queueNameGroupOnly: true
+          group: dlq
           producer:
-            required-groups: test-queue
+            required-groups: dlq

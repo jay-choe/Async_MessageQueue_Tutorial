@@ -11,14 +11,15 @@ spring:
       bindings:
         publishChannel:
           binder: rabbit
+          group: pay
           destination: payrequest
+          queueNameGroupOnly: true
           durableSubscribtion: true
-          producer:
-            required-groups: test-queue
 
         resultChannel:
           binder: rabbit
           destination: resultChannel
           durableSubscribtion: true
+          queueNameGroupOnly: true
           producer:
-            required-groups: test-queue
+            required-groups: result

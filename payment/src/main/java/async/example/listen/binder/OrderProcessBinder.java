@@ -6,7 +6,7 @@ import org.springframework.messaging.SubscribableChannel;
 public interface OrderProcessBinder {
     String MESSAGE_CHANNEL_NAME = "subscribeChannel";
 
-    @Input("subscribeChannel")
+    @Input(MESSAGE_CHANNEL_NAME)
     SubscribableChannel channel();
 }
 
