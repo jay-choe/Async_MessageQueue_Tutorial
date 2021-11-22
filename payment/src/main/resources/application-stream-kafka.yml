@@ -12,13 +12,16 @@ spring:
           destination: payrequest
           producer:
             required-groups: test-queue
+          group: result
         resultCheannel:
           binder: kafka
           destination: resultChannel
           producer:
             required-groups: test-queue
+          group: result
         deadLetterChannel:
           binder: kafka
           destination: dead-letter-queue
           producer:
             required-groups: test-queue
+          group: result

@@ -31,7 +31,7 @@ public class PayService {
         }
 
         // 결제 성공 확률 50%
-        if (randNo % 2 == 1) {
+        if (randNo % 6 == 1) {
             log.error("결제에 실패하였습니다.");
             return false;
         } else {
