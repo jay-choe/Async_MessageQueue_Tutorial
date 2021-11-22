@@ -2,16 +2,11 @@ package async.example.service;
 
 import async.example.domain.entity.OrderLog;
 import async.example.domain.entity.Product;
-import async.example.domain.entity.repository.OrderLogRepository;
-import async.example.domain.entity.repository.ProductRepository;
 import async.example.domain.enumtype.OrderStatus;
-import async.example.publish.binder.OrderBinder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import message.OrderMessage;
 import message.OrderRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -24,8 +19,6 @@ public class OrderAsyncService {
     private static final String paymentUrl = "http://localhost:20002/payment";
 
     private final CommonService commonService;
-    private final OrderLogRepository orderLogRepository;
-    private final ProductRepository productRepository;
 
     @Transactional
     public void orderAsync(OrderRequest orderRequest) {
