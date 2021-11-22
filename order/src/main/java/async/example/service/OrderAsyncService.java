@@ -6,6 +6,7 @@ import async.example.domain.entity.repository.OrderLogRepository;
 import async.example.domain.entity.repository.ProductRepository;
 import async.example.domain.enumtype.OrderStatus;
 import async.example.publish.binder.OrderBinder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import message.OrderRequest;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +15,14 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class OrderAsyncService {
     RestTemplate restTemplate = new RestTemplate();
     private static final String paymentUrl = "http://localhost:20002/payment";
+
     private final OrderLogRepository orderLogRepository;
     private final ProductRepository productRepository;
 
-    public OrderAsyncService(
-        OrderLogRepository orderLogRepository,
-        ProductRepository productRepository, OrderBinder orderBinder) {
-        this.orderLogRepository = orderLogRepository;
-        this.productRepository = productRepository;
-    }
 
     public void orderAsync(OrderRequest orderRequest) {
         Product product = productRepository.findById(orderRequest.getProductId())
