@@ -67,7 +67,7 @@ public class OrderService {
         }
         return false;
     }
-    
+
     public void orderAsync(OrderRequest orderRequest) {
         Product product = productRepository.findById(orderRequest.getProductId())
             .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));
