@@ -26,12 +26,6 @@ public class OrderController {
         return new ResponseEntity<>("주문 완료", HttpStatus.OK);
     }
 
-    @PostMapping("/sync/v2")
-    public ResponseEntity<String> orderV2(@RequestBody OrderRequest orderRequest) { // 결제가 성공하는 것을 보장하는 동기 요청 입니다.
-        orderService.orderUntilSucceed(orderRequest);
-        return new ResponseEntity<>("주문 완료", HttpStatus.OK);
-    }
-
     @PostMapping("/async/v1")
     public ResponseEntity<String> orderAsync(@RequestBody OrderRequest orderRequest) { //비동기 요청입니다.
         orderService.orderAsync(orderRequest);
