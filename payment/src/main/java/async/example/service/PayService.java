@@ -39,15 +39,4 @@ public class PayService {
             return true;
         }
     }
-
-    // Dead Queue에 있는 결제 요청 내역을 성공할 때까지 시도하는 함수 입니다.
-    public void payToSucceedInDeadLetterQueue(OrderMessage orderMessage) {
-        while (true) {
-            boolean result = pay(orderMessage.getTotalPrice());
-            if (result == Boolean.TRUE) {
-                log.info("결제 성공- 주문 아이디: {}", orderMessage.getLogId());
-                return ;
-            }
-        }
-    }
 }
