@@ -7,7 +7,6 @@ import async.example.domain.entity.repository.ProductRepository;
 import async.example.domain.enumtype.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +21,11 @@ public class CommonService {
     public Product findProduct(int productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));
+    }
+
+    public OrderLog findOrderLog(int orderId) {
+        return orderLogRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 주문내역입니다."));
     }
 
     @Transactional
@@ -46,6 +50,8 @@ public class CommonService {
         log.info("결제에 성공했습니다.");
         orderLog.setStatus(OrderStatus.COMPLETE);
         product.updateStock(requestStock);
+        productRepository.save(product);
+        orderLogRepository.save(orderLog);
     }
 
     void saveFailOrder(OrderLog orderLog) {

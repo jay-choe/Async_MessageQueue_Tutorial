@@ -2,8 +2,6 @@ package async.example.service;
 
 import async.example.domain.entity.OrderLog;
 import async.example.domain.entity.Product;
-import async.example.domain.entity.repository.OrderLogRepository;
-import async.example.domain.entity.repository.ProductRepository;
 import async.example.domain.enumtype.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
