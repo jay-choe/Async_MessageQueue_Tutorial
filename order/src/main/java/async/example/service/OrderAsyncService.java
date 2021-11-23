@@ -50,7 +50,7 @@ public class OrderAsyncService {
         Product product = commonService.findProduct(orderLog.getProductId());
         log.info("재고 차감 중");
         log.info("========================");
-        commonService.updateStockAndSaveOrder(product, orderLog.getOrderStock(), orderLog);
+        commonService.updateStockAndSaveOrder2(product, orderLog.getOrderStock(), orderLog);
         log.info("주문 상태 변경 및 재고 차감 완료");
     }
 

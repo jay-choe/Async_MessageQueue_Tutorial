@@ -2,7 +2,6 @@ package async.example.service;
 
 import async.example.domain.entity.OrderLog;
 import async.example.domain.entity.Product;
-import async.example.domain.entity.repository.OrderLogRepository;
 import async.example.domain.enumtype.OrderStatus;
 import async.example.publish.binder.OrderBinder;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderMqService {
 
-    private final OrderLogRepository orderLogRepository;
     private final OrderBinder orderBinder;
     private final CommonService commonService;
 
+    @Transactional
     public void orderAsyncMessaging(OrderRequest orderRequest) {
         // before payment
         Product product = commonService.findProduct(orderRequest.getProductId());
@@ -45,16 +44,14 @@ public class OrderMqService {
         log.info("주문 요청 처리 완료");
         log.info("========================");
         orderLog.setStatus(OrderStatus.ASYNC_ORDER_REQUEST_COMPLETE);
-        orderLogRepository.save(orderLog);
     }
 
     // 메세지 큐로 받은 결제의 결과를 처리하는 함수
     @Transactional
     public void handlePaymentResult(OrderMessage message) {
         OrderLog orderLog = commonService.findOrderLog(message.getLogId());
-        orderLog.setStatus(OrderStatus.COMPLETE);
         Product product = commonService.findProduct(orderLog.getProductId());
-        product.updateStock(message.getStock());
+        commonService.updateStockAndSaveOrder(product, message.getStock(), orderLog);
         log.info("======================");
         log.info("주문 결과 처리 완료");
     }
