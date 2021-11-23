@@ -68,37 +68,6 @@ public class OrderService {
         return false;
     }
 
-    @Transactional
-    public void orderUntilSucceed(OrderRequest orderRequest) {
-        Product product = productRepository.findById(orderRequest.getProductId())
-            .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));
-
-        stockCheck(product.getStock(), orderRequest.getStock());
-
-        log.info("주문 생성중");
-        OrderLog orderLog = OrderLog.builder()
-            .productId(product.getId())
-            .productName(product.getName())
-            .productPrice(product.getPrice())
-            .orderStock(orderRequest.getStock())
-            .status(OrderStatus.WAITING_FOR_PAYMENT)
-            .build();
-        orderLogRepository.save(orderLog);
-        log.info("==========주문 내역 생성=============");
-        // 결제 성공시까지 계속 try
-        Long totalPrice = product.getPrice() * orderRequest.getStock();
-        ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
-        while (response.getBody().equals("실패")) {
-            response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
-            log.info(response.getBody());
-        }
-        log.info("결제 성공");
-        product.updateStock(orderRequest.getStock());
-        productRepository.save(product);
-        orderLog.setStatus(OrderStatus.COMPLETE);
-        orderLogRepository.save(orderLog);
-    }
-
     public void orderAsync(OrderRequest orderRequest) {
         Product product = productRepository.findById(orderRequest.getProductId())
             .orElseThrow(() -> new RuntimeException("존재하지 않는 상품입니다."));

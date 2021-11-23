@@ -1,6 +1,9 @@
 package async.example.controller;
 
+import async.example.service.OrderAsyncService;
+import async.example.service.OrderMqService;
 import async.example.service.OrderService;
+import async.example.service.OrderSyncService;
 import lombok.RequiredArgsConstructor;
 import message.OrderRequest;
 import org.springframework.http.HttpStatus;
@@ -16,31 +19,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderSyncService orderSyncService;
+    private final OrderAsyncService orderAsyncService;
+    private final OrderMqService orderMqService;
 
     @PostMapping("/sync/v1")
     public ResponseEntity<String> orderV1(@RequestBody OrderRequest orderRequest) { // 단순한 동기 요청입니다.
-        boolean result = orderService.orderSync(orderRequest);
+        boolean result = orderSyncService.orderSync(orderRequest);
         if (result == Boolean.FALSE) {
             return new ResponseEntity<>("주문 실패", HttpStatus.CONFLICT);
         }
         return new ResponseEntity<>("주문 완료", HttpStatus.OK);
     }
 
-    @PostMapping("/sync/v2")
-    public ResponseEntity<String> orderV2(@RequestBody OrderRequest orderRequest) { // 결제가 성공하는 것을 보장하는 동기 요청 입니다.
-        orderService.orderUntilSucceed(orderRequest);
-        return new ResponseEntity<>("주문 완료", HttpStatus.OK);
-    }
-
     @PostMapping("/async/v1")
     public ResponseEntity<String> orderAsync(@RequestBody OrderRequest orderRequest) { //비동기 요청입니다.
-        orderService.orderAsync(orderRequest);
+        orderAsyncService.orderAsync(orderRequest);
         return new ResponseEntity<>("주문 요청이 생성되었습니다.", HttpStatus.OK);
     }
 
     @PostMapping("/async/mq")
     public ResponseEntity<String> orderAsyncByMessageQueue(@RequestBody OrderRequest orderRequest) { // 메세지 큐를 통한 비동기 요청입니다.
-        orderService.orderAsyncMessaging(orderRequest);
+        orderMqService.orderAsyncMessaging(orderRequest);
         return new ResponseEntity<>("주문 요청이 생성되었습니다.", HttpStatus.OK);
     }
 }
