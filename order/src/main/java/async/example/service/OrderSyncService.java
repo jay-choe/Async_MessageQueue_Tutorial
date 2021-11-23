@@ -27,7 +27,7 @@ public class OrderSyncService {
         Product product = commonService.findProduct(orderRequest.getProductId());
         int requestStock = orderRequest.getStock();
         Long totalPrice = product.getPrice() * requestStock;
-        OrderLog orderLog = commonService.checkStockAndCreateOrder(product, requestStock, OrderStatus.WAITING_FOR_PAYMENT);
+        OrderLog orderLog = commonService.checkStockAndCreateOrder(product, requestStock);
 
         // request payment, after payment request (구현해보세요)
         log.info("========== 결제 요청 =============");

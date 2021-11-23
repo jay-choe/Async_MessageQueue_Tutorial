@@ -28,13 +28,13 @@ public class CommonService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 주문내역입니다."));
     }
 
-    OrderLog checkStockAndCreateOrder(Product product, int requestStock, OrderStatus status) {
+    OrderLog checkStockAndCreateOrder(Product product, int requestStock) {
         if (product.getStock() < requestStock) {
             log.error("재고가 부족합니다.");
             throw new RuntimeException("재고가 부족합니다.");
         }
         log.info("========== 주문 내역 생성 ==========");
-        OrderLog orderLog = OrderLog.create(product, requestStock, status);
+        OrderLog orderLog = OrderLog.create(product, requestStock);
         return orderLogRepository.save(orderLog);
     }
 
