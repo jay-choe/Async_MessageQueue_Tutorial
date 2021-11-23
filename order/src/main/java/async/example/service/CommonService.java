@@ -33,35 +33,38 @@ public class CommonService {
             log.error("재고가 부족합니다.");
             throw new RuntimeException("재고가 부족합니다.");
         }
-        log.info("============주문 내역 생성==========");
-        OrderLog orderLog = OrderLog.builder()
-                .productId(product.getId())
-                .productName(product.getName())
-                .productPrice(product.getPrice())
-                .orderStock(requestStock)
-                .status(status)
-                .build();
+        log.info("========== 주문 내역 생성 ==========");
+        OrderLog orderLog = OrderLog.create(product, requestStock, status);
         return orderLogRepository.save(orderLog);
     }
 
-    void updateStockAndSaveOrder(Product product, int requestStock, OrderLog orderLog) {
-        log.info("결제에 성공했습니다.");
+    void saveSuccessOrderAndUpdateStock(Product product, int requestStock, OrderLog orderLog) {
+        log.info("주문요청 성공 처리 완료");
+        log.info("재고 차감 완료");
         orderLog.setStatus(OrderStatus.COMPLETE);
         product.updateStock(requestStock);
     }
 
+    void saveFailOrder(OrderLog orderLog, Long totalPrice) {
+        log.info("주문요청 실패 처리 완료: 주문ID: {}, 상품ID: {}, 금액: {}",
+                orderLog.getId(), orderLog.getProductId(), totalPrice);
+        orderLog.setStatus(OrderStatus.FAILED);
+    }
+
     @Transactional
-    void updateStockAndSaveOrder2(Product product, int requestStock, OrderLog orderLog) {
-        log.info("결제에 성공했습니다.");
+    void saveSuccessOrderAndUpdateStock2(Product product, int requestStock, OrderLog orderLog) {
+        log.info("주문요청 성공 처리 완료");
+        log.info("재고 차감 완료");
         orderLog.setStatus(OrderStatus.COMPLETE);
         product.updateStock(requestStock);
         productRepository.save(product);
         orderLogRepository.save(orderLog);
     }
 
-    void saveFailOrder(OrderLog orderLog) {
-        log.info("결제에 실패했습니다.");
-        orderLog.setStatus(OrderStatus.FAILED);
+    void saveFailOrder2(OrderLog orderLog, Long totalPrice) {
+        log.info("주문요청 실패 처리 완료: 주문ID: {}, 상품ID: {}, 금액: {}",
+                orderLog.getId(), orderLog.getProductId(), totalPrice);
+        orderLogRepository.save(orderLog);
     }
 
 }
