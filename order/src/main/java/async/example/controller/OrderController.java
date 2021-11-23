@@ -23,8 +23,8 @@ public class OrderController {
 
     // 동기요청
     @PostMapping("/sync/v1")
-    public ResponseEntity<String> orderV1(@RequestBody OrderRequest orderRequest) {
-        boolean result = orderSyncService.orderSync(orderRequest);
+    public ResponseEntity<String> orderSync(@RequestBody OrderRequest orderRequest) {
+        boolean result = orderSyncService.order(orderRequest);
         if (result == Boolean.TRUE) {
             return new ResponseEntity<>("주문이 성공했습니다", HttpStatus.OK);
         }
@@ -34,14 +34,14 @@ public class OrderController {
     // 비동기요청
     @PostMapping("/async/v1")
     public ResponseEntity<String> orderAsync(@RequestBody OrderRequest orderRequest) {
-        orderAsyncService.orderAsync(orderRequest);
+        orderAsyncService.order(orderRequest);
         return new ResponseEntity<>("주문 요청이 완료되었으나 결제대기중입니다.", HttpStatus.OK);
     }
 
     // 메시지큐를 이용한 비동기요청
     @PostMapping("/async/mq")
     public ResponseEntity<String> orderAsyncByMessageQueue(@RequestBody OrderRequest orderRequest) {
-        orderMqService.orderAsyncMessaging(orderRequest);
+        orderMqService.order(orderRequest);
         return new ResponseEntity<>("주문 요청이 완료되었으나 결제대기중입니다.", HttpStatus.OK);
     }
 }

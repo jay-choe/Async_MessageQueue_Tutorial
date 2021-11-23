@@ -21,7 +21,7 @@ public class OrderMqService {
     private final CommonService commonService;
 
     @Transactional
-    public void orderAsyncMessaging(OrderRequest orderRequest) {
+    public void order(OrderRequest orderRequest) {
         // before payment
         Product product = commonService.findProduct(orderRequest.getProductId());
         int requestStock = orderRequest.getStock();

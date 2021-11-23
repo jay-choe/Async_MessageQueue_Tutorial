@@ -22,7 +22,7 @@ public class OrderAsyncService {
     private final CommonService commonService;
 
     @Transactional
-    public void orderAsync(OrderRequest orderRequest) {
+    public void order(OrderRequest orderRequest) {
         // before payment
         Product product = commonService.findProduct(orderRequest.getProductId());
         int requestStock = orderRequest.getStock();

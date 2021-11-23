@@ -15,7 +15,6 @@ public class PayService {
     public boolean pay(Long totalPrice) {
         log.info("========== 결제 진행중 ==========");
 
-        // random -> 1 ~ 10
         int randNo = new Random().nextInt(10) + 1;
         try {
             // 1 ~ 10 초 지연

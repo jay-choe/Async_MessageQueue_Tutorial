@@ -22,7 +22,7 @@ public class OrderSyncService {
     private final CommonService commonService;
 
     @Transactional
-    public boolean orderSync(OrderRequest orderRequest) {
+    public boolean order(OrderRequest orderRequest) {
         // before payment
         Product product = commonService.findProduct(orderRequest.getProductId());
         int requestStock = orderRequest.getStock();
@@ -32,7 +32,6 @@ public class OrderSyncService {
         // request payment, after payment request (구현해보세요)
         log.info("========== 결제 요청 =============");
         ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
-
         if (response.getBody().equals("결제 성공")) {
             commonService.saveSuccessOrderAndUpdateStock(product, requestStock, orderLog);
             return true;
