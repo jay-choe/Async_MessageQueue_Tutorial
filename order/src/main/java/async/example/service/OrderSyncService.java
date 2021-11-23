@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @RequiredArgsConstructor
 public class OrderSyncService {
+
     RestTemplate restTemplate = new RestTemplate();
     private static final String paymentUrl = "http://localhost:20002/payment";
 
@@ -28,14 +29,15 @@ public class OrderSyncService {
         Long totalPrice = product.getPrice() * requestStock;
         OrderLog orderLog = commonService.checkStockAndCreateOrder(product, requestStock, OrderStatus.WAITING_FOR_PAYMENT);
 
-        // request payment
+        // request payment, after payment request (구현해보세요)
+        log.info("========== 결제 요청 =============");
         ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
-        log.info("==========결제 요청 =============");
-        if (response.getBody().equals("성공")) {
-            commonService.updateStockAndSaveOrder(product, requestStock, orderLog);
+
+        if (response.getBody().equals("결제 성공")) {
+            commonService.saveSuccessOrderAndUpdateStock(product, requestStock, orderLog);
             return true;
         }
-        commonService.saveFailOrder(orderLog);
+        commonService.saveFailOrder(orderLog, totalPrice);
         return false;
     }
 }

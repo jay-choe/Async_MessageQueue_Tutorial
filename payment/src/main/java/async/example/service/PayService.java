@@ -12,17 +12,11 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class PayService {
 
-    RestTemplate restTemplate = new RestTemplate();
-    private final String RESULT_SEND_URL = "http://localhost:20001/order/async/result/v1";
-
     public boolean pay(Long totalPrice) {
-        log.info("=============결제 진행중=================");
-        log.info("======================================");
-        final Random rand = new Random();
-        // random -> 1 ~ 10
-        int randNo = rand.nextInt(10);
-        ++randNo;
+        log.info("========== 결제 진행중 ==========");
 
+        // random -> 1 ~ 10
+        int randNo = new Random().nextInt(10) + 1;
         try {
             // 1 ~ 10 초 지연
             Thread.sleep(randNo * 1000);

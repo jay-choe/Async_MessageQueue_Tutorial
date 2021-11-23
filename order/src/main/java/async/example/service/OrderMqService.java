@@ -28,6 +28,7 @@ public class OrderMqService {
         Long totalPrice = product.getPrice() * requestStock;
         OrderLog orderLog = commonService.checkStockAndCreateOrder(product, requestStock, OrderStatus.WAITING_FOR_PAYMENT);
 
+        log.info("========== 결제 요청 =============");
         OrderMessage orderMessage = OrderMessage.builder()
             .logId(orderLog.getId())
             .productId(product.getId())
@@ -41,8 +42,6 @@ public class OrderMqService {
             throw new RuntimeException("Dead Queue 전송 실패");
         }
 
-        log.info("주문 요청 처리 완료");
-        log.info("========================");
         orderLog.setStatus(OrderStatus.ASYNC_ORDER_REQUEST_COMPLETE);
     }
 
@@ -51,9 +50,7 @@ public class OrderMqService {
     public void handlePaymentResult(OrderMessage message) {
         OrderLog orderLog = commonService.findOrderLog(message.getLogId());
         Product product = commonService.findProduct(orderLog.getProductId());
-        commonService.updateStockAndSaveOrder(product, message.getStock(), orderLog);
-        log.info("======================");
-        log.info("주문 결과 처리 완료");
+        commonService.saveSuccessOrderAndUpdateStock(product, message.getStock(), orderLog);
     }
 
 }
