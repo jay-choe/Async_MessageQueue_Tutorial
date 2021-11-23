@@ -37,8 +37,7 @@ public class OrderProcessListener {
             log.info("DEAD LETTER QUEUE 전송");
             orderMessage.setErrorMessage("=============결제 실패=================");
             orderMessage.setErrorRetryCount(orderMessage.getErrorRetryCount() + 1);
-            this.deadLetterBinder.channel().send(MessageBuilder.withPayload(orderMessage).build());
-            sendResult = this.payResultBinder.channel().send(MessageBuilder.withPayload(orderMessage).build());
+            sendResult = this.deadLetterBinder.channel().send(MessageBuilder.withPayload(orderMessage).build());
             if (!sendResult) {
                 log.error("내역 전송 실패");
                 throw new RuntimeException("Dead Queue 전송 실패");
