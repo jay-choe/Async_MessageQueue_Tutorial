@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @RequiredArgsConstructor
 public class OrderAsyncService {
+
     RestTemplate restTemplate = new RestTemplate();
     private static final String paymentUrl = "http://localhost:20002/payment";
 
