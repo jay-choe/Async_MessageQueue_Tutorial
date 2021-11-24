@@ -1,6 +1,8 @@
 package async.example.controller;
 
-import async.example.service.OrderService;
+import async.example.service.OrderAsyncService;
+import async.example.service.OrderMqService;
+import async.example.service.OrderSyncService;
 import lombok.RequiredArgsConstructor;
 import message.OrderRequest;
 import org.springframework.http.HttpStatus;
@@ -15,32 +17,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/order")
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrderSyncService orderSyncService;
+    private final OrderAsyncService orderAsyncService;
+    private final OrderMqService orderMqService;
 
+    // 동기요청
     @PostMapping("/sync/v1")
-    public ResponseEntity<String> orderV1(@RequestBody OrderRequest orderRequest) { // 단순한 동기 요청입니다.
-        boolean result = orderService.orderSync(orderRequest);
-        if (result == Boolean.FALSE) {
-            return new ResponseEntity<>("주문 실패", HttpStatus.CONFLICT);
+    public ResponseEntity<String> orderSync(@RequestBody OrderRequest orderRequest) {
+        boolean result = orderSyncService.order(orderRequest);
+        if (result == Boolean.TRUE) {
+            return new ResponseEntity<>("주문이 성공했습니다", HttpStatus.OK);
         }
-        return new ResponseEntity<>("주문 완료", HttpStatus.OK);
+        return new ResponseEntity<>("주문이 실패했습니다", HttpStatus.CONFLICT);
     }
 
-    @PostMapping("/sync/v2")
-    public ResponseEntity<String> orderV2(@RequestBody OrderRequest orderRequest) { // 결제가 성공하는 것을 보장하는 동기 요청 입니다.
-        orderService.orderUntilSucceed(orderRequest);
-        return new ResponseEntity<>("주문 완료", HttpStatus.OK);
-    }
-
+    // 비동기요청
     @PostMapping("/async/v1")
-    public ResponseEntity<String> orderAsync(@RequestBody OrderRequest orderRequest) { //비동기 요청입니다.
-        orderService.orderAsync(orderRequest);
-        return new ResponseEntity<>("주문 요청이 생성되었습니다.", HttpStatus.OK);
+    public ResponseEntity<String> orderAsync(@RequestBody OrderRequest orderRequest) {
+        orderAsyncService.order(orderRequest);
+        return new ResponseEntity<>("주문 요청이 완료되었으나 결제대기중입니다.", HttpStatus.OK);
     }
 
+    // 메시지큐를 이용한 비동기요청
     @PostMapping("/async/mq")
-    public ResponseEntity<String> orderAsyncByMessageQueue(@RequestBody OrderRequest orderRequest) { // 메세지 큐를 통한 비동기 요청입니다.
-        orderService.orderAsyncMessaging(orderRequest);
-        return new ResponseEntity<>("주문 요청이 생성되었습니다.", HttpStatus.OK);
+    public ResponseEntity<String> orderAsyncByMessageQueue(@RequestBody OrderRequest orderRequest) {
+        orderMqService.order(orderRequest);
+        return new ResponseEntity<>("주문 요청이 완료되었으나 결제대기중입니다.", HttpStatus.OK);
     }
 }

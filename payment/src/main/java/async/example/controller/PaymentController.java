@@ -21,12 +21,11 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity pay(@RequestBody final Long price) {
-
         boolean result = payService.pay(price);
         if (result == false) {
-            return new ResponseEntity("실패", HttpStatus.OK);
+            return new ResponseEntity("결제 실패", HttpStatus.OK);
         } else {
-            return new ResponseEntity("성공", HttpStatus.OK);
+            return new ResponseEntity("결제 성공", HttpStatus.OK);
         }
     }
 }
