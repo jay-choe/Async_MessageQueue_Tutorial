@@ -34,9 +34,12 @@ public class OrderAsyncService {
         new Thread(() -> {
             ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
             if (response.getBody().equals("결제 성공")) {
+                log.info("결제 완료 - 금액: {}", totalPrice);
                 commonService.saveSuccessOrderAndUpdateStock2(product, requestStock, orderLog);
+            } else {
+                log.info("결제 실패 - 금액: {}", totalPrice);
+                commonService.saveFailOrder2(orderLog);
             }
-            commonService.saveFailOrder2(orderLog, totalPrice);
         }).start();
     }
 }

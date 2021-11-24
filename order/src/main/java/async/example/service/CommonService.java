@@ -53,17 +53,16 @@ public class CommonService {
 
     @Transactional
     void saveSuccessOrderAndUpdateStock2(Product product, int requestStock, OrderLog orderLog) {
-        log.info("주문요청 성공 처리 완료");
-        log.info("재고 차감 완료");
+        log.info("주문ID: {}, 주문요청 성공 처리 완료", orderLog.getId());
+        log.info("재고 차감 완료 - 상품ID: {}, 수량: {}", product.getId(), requestStock);
         orderLog.setStatus(OrderStatus.COMPLETE);
         product.updateStock(requestStock);
         productRepository.save(product);
         orderLogRepository.save(orderLog);
     }
 
-    void saveFailOrder2(OrderLog orderLog, Long totalPrice) {
-        log.info("주문요청 실패 처리 완료: 주문ID: {}, 상품ID: {}, 금액: {}",
-                orderLog.getId(), orderLog.getProductId(), totalPrice);
+    void saveFailOrder2(OrderLog orderLog) {
+        log.info("주문ID: {} , 주문요청 실패 처리 완료", orderLog.getId());
         orderLog.setStatus(OrderStatus.FAILED);
         orderLogRepository.save(orderLog);
     }
