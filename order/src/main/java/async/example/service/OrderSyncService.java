@@ -33,10 +33,13 @@ public class OrderSyncService {
         log.info("========== 결제 요청 =============");
         ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
         if (response.getBody().equals("결제 성공")) {
+            log.info("결제 성공 - 금액: {}", totalPrice);
             commonService.saveSuccessOrderAndUpdateStock(product, requestStock, orderLog);
             return true;
+        } else {
+            log.info("결제 실패 - 금액: {}", totalPrice);
+            commonService.saveFailOrder(orderLog);
+            return false;
         }
-        commonService.saveFailOrder(orderLog, totalPrice);
-        return false;
     }
 }
