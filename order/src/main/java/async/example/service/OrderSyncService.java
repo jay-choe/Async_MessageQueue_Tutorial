@@ -27,16 +27,14 @@ public class OrderSyncService {
         Product product = commonService.findProduct(orderRequest.getProductId());
         int requestStock = orderRequest.getStock();
         Long totalPrice = product.getPrice() * requestStock;
-        OrderLog orderLog = commonService.checkStockAndCreateOrder(product, requestStock, OrderStatus.WAITING_FOR_PAYMENT);
+        OrderLog orderLog = commonService.checkStockAndCreateOrder(product, requestStock);
 
-        // request payment, after payment request (구현해보세요)
-        log.info("========== 결제 요청 =============");
-        ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, totalPrice, String.class);
-        if (response.getBody().equals("결제 성공")) {
-            commonService.saveSuccessOrderAndUpdateStock(product, requestStock, orderLog);
-            return true;
-        }
-        commonService.saveFailOrder(orderLog, totalPrice);
-        return false;
+        /*
+        request payment, after payment request (아래에 구현해보세요)
+        결제 요청 후 아래 메소드 사용 가능합니다.
+        commonService.saveSuccessOrderAndUpdateStock
+        commonService.saveFailOrder
+        */
+
     }
 }
