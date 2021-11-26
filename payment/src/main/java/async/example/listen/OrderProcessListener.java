@@ -34,14 +34,7 @@ public class OrderProcessListener {
         boolean result = this.payService.pay(orderMessage.getTotalPrice());
         boolean sendResult;
         if (result == Boolean.FALSE) {
-            log.info("DEAD LETTER QUEUE 전송");
-            orderMessage.setErrorMessage("=============결제 실패=================");
-            orderMessage.setErrorRetryCount(orderMessage.getErrorRetryCount() + 1);
-            sendResult = this.deadLetterBinder.channel().send(MessageBuilder.withPayload(orderMessage).build());
-            if (!sendResult) {
-                log.error("내역 전송 실패");
-                throw new RuntimeException("Dead Queue 전송 실패");
-            }
+
         } else {
             log.info("==============================================================");
             sendResult = this.payResultBinder.channel().send(MessageBuilder.withPayload(orderMessage).build());
