@@ -36,3 +36,7 @@ docker-compose -f docker-infra-compose-m1.yml up -d
 
 ### 서비스 아키텍처
 <img width="691" alt="스크린샷 2021-11-24 오후 1 14 17" src="https://user-images.githubusercontent.com/68694844/143174180-f16f18fd-4ce1-4ebb-b7a6-651b7620a2d2.png">
+
+<br/>
+### 문제지
+https://shadowed-soybean-157.notion.site/ffbe7d2ae2e343ef846b0a74893bd0f8
